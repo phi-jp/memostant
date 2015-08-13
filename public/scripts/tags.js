@@ -35,9 +35,15 @@ riot.tag('app', '<header></header> <content></content>', function(opts) {
         if (localStorage.getItem('id_token') && !global.me) {
           api.me()
             .done(function(res) {
-              global.me = res.user;
-              riot.mountTo('content', tag);
-              self.tags.header.update();
+              if (res.user) {
+                global.me = res.user;
+                riot.mountTo('content', tag);
+                self.tags.header.update();
+              }
+              else {
+                history.pushState(null, null, '/#setting');
+                riot.mountTo('content', 'setting');
+              }
             });
         }
         else {
@@ -92,6 +98,22 @@ riot.tag('note', '<h2>user</h2> <form name="mainForm" onsubmit="{submit}"> <inpu
       api.notes.update(id, data)
         .done(function(res) {
         });
+    };
+  
+});
+
+riot.tag('setting', '<div class="container"> <h2>setting</h2> <form name="mainForm" onsubmit="{submit}"> <input name="name" type="text" placeHolder="name"> <button>submit</button> </form> </div>', function(opts) {
+    this.submit = function() {
+      var elements = this.mainForm.elements;
+      var data = {
+        name: elements.name.value,
+      };
+      if (global.me) {
+        api.users.update(data);
+      }
+      else {
+        api.users.create(data);
+      }
     };
   
 });

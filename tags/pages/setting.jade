@@ -1,0 +1,20 @@
+setting
+  div.container
+    h2 setting
+    form(name='mainForm', onsubmit='{submit}')
+      input(name='name', type='text', placeHolder='name')
+      button submit
+
+  script.
+    this.submit = function() {
+      var elements = this.mainForm.elements;
+      var data = {
+        name: elements.name.value,
+      };
+      if (global.me) {
+        api.users.update(data);
+      }
+      else {
+        api.users.create(data);
+      }
+    };

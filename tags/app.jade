@@ -38,9 +38,15 @@ app
         if (localStorage.getItem('id_token') && !global.me) {
           api.me()
             .done(function(res) {
-              global.me = res.user;
-              riot.mountTo('content', tag);
-              self.tags.header.update();
+              if (res.user) {
+                global.me = res.user;
+                riot.mountTo('content', tag);
+                self.tags.header.update();
+              }
+              else {
+                history.pushState(null, null, '/#setting');
+                riot.mountTo('content', 'setting');
+              }
             });
         }
         else {

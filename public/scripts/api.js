@@ -13,8 +13,8 @@
         xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
       };
       var a = $.ajax(params)
-      a.done(function() {
-        console.dir(arguments);
+      a.done(function(data) {
+        console.dir(data);
       });
 
       return a;
@@ -25,6 +25,23 @@
         url: 'me',
         method: 'GET',
       });
+    },
+
+    users: {
+      create: function(data) {
+        return api.ajax({
+          url: 'users',
+          method: 'POST',
+          data: data,
+        });
+      },
+      update: function(id, data) {
+        return api.ajax({
+          url: 'users/' + id,
+          method: 'PUT',
+          data: data,
+        });
+      },
     },
 
     notes: {

@@ -1,0 +1,66 @@
+app
+  header
+  content
+  
+  script.
+    window.lock = new Auth0Lock('OkDgBFuMfTt6iKz0fLQ1IAUm9zftz9TW', 'phi.auth0.com');
+    var self = this;
+
+    var hash = lock.parseHash(window.location.hash);
+    if (hash && hash.id_token) {
+      localStorage.setItem('id_token', hash.id_token);
+      location.hash = '';
+      location.reload();
+    }
+
+    this.on('mount', function() {
+      riot.route.start();
+
+      riot.route.parser(function(path) {
+        var raw = path.split('?');
+        var hashes = raw[0].split('/');
+        var qs = raw[1];
+        var params = {};
+
+        if (qs) {
+          qs.split('&').forEach(function(v) {
+            var c = v.split('=');
+            params[c[0]] = c[1];
+          });
+        }
+
+        return [hashes, params];
+      });
+
+      riot.route(function(path, query) {
+        var tag = path[0];
+
+        if (localStorage.getItem('id_token') && !global.me) {
+          api.me()
+            .done(function(res) {
+              global.me = res.user;
+              riot.mountTo('content', tag);
+              self.tags.header.update();
+            });
+        }
+        else {
+          riot.mountTo('content', tag);
+          self.tags.header.update();
+        }
+      });
+
+      var hash = location.hash.replace('#', '');
+      riot.route(hash || 'home');
+    });
+
+
+
+
+
+
+
+
+
+
+
+

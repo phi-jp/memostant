@@ -1,0 +1,28 @@
+user
+  h2 user
+
+  ul.collection
+    li.collection-item(each='{notes}', onclick='{edit}')
+      span.title {title}
+      p {content}
+        span by {_creator.name}
+
+  script.
+    var self = this;
+    this.fetch = function() {
+      // ノートを取得
+      api.notes.index()
+        .done(function(res) {
+          self.notes = res.notes;
+          self.update();
+        });
+    };
+    this.fetch();
+
+    this.edit = function(e) {
+      var item = e.item;
+      if (item._creator._id === global.me._id) {
+        var path = ['note', item._id].join('/');
+        riot.route(path);
+      }
+    };

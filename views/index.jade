@@ -1,0 +1,26 @@
+//- editor.jade
+extends ./layout
+
+block content
+  app
+
+  // ace
+  script(src="http://cdn.jsdelivr.net/ace/1.1.9/min/ace.js")
+  script(src="http://cdn.jsdelivr.net/ace/1.1.9/min/ext-language_tools.js")
+  script(src="http://cdn.jsdelivr.net/ace/1.1.9/min/ext-emmet.js")
+  //- script(src="http://cdn.rawgit.com/nightwing/emmet-core/master/emmet.js")
+  // jszip
+  script(src='http://cdnjs.cloudflare.com/ajax/libs/jszip/2.3.0/jszip.min.js')
+  // jframe
+  script(src="http://cdn.rawgit.com/phi-jp/jframe/0.0.1/jframe.js")
+  // markdown
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js")
+  // Auth0Lock script
+  script(src='http://cdn.auth0.com/js/lock-7.5.min.js')
+
+  script(src="/scripts/api.js")
+  script(src="/scripts/tags.js")
+
+  script.
+    riot.mount('app');
+

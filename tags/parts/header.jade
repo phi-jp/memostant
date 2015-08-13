@@ -1,0 +1,35 @@
+header
+  nav
+    .nav-wrapper
+      .brand-logo
+        a(href='') Memostant
+      ul.right(if='{!isLogin}')
+        li
+          a(href='#login', onclick='{login}') Login
+        li
+          a(href='#signup') Signup
+      ul.right(if='{isLogin}')
+        li
+          a(href='#user/{global.me.name}') {global.me.name}
+        li
+          a(href='', onclick='{logout}') Logout
+  style(scoped).
+    :scope { display: block }
+    nav {
+      padding: 0px 20px;
+    }
+  script.
+    this.login = function() {
+      lock.show({ authParams: { scope: 'openid' } });
+    };
+
+    // ログアウト
+    this.logout = function() {
+      localStorage.removeItem('id_token');
+    };
+
+    this.on('update', function() {
+      var id_token = localStorage.getItem('id_token');
+      this.isLogin = !!id_token;
+    });
+

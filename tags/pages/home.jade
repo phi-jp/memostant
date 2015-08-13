@@ -1,0 +1,21 @@
+home
+  h2 home
+  ul
+    li(each='{notes}')
+      b {title}
+      | 
+      span {content}
+      | 
+      span by {_creator.name}
+
+  script.
+    var self = this;
+    this.fetch = function() {
+      // ノートを取得
+      api.notes.index()
+        .done(function(res) {
+          self.notes = res.notes;
+          self.update();
+        });
+    };
+    this.fetch();

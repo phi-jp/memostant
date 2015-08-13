@@ -1,0 +1,36 @@
+note
+  h2 user
+
+  form(name='mainForm', onsubmit='{submit}')
+    input(name='title')
+    textarea(name='content') 
+    button submit
+
+  script.
+    var self = this;
+    var id = null;
+
+    riot.route.exec(function(path, query) {
+      id = path[1];
+    });
+
+    api.notes.show(id)
+      .done(function(data) {
+        var elements = self.mainForm.elements;
+        elements.title.value = data.note.title;
+        elements.content.value = data.note.content;
+        self.update();
+      });
+
+    this.submit = function() {
+      var elements = self.mainForm.elements;
+      var data = {
+        title: elements.title.value,
+        content: elements.content.value,
+      };
+      // ノートを更新
+      api.notes.update(id, data)
+        .done(function(res) {
+        });
+    };
+

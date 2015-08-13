@@ -1,0 +1,27 @@
+//- layout.jade
+doctype html
+
+html
+  head
+    meta(charset='utf-8')
+
+    meta(name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1")
+    meta(name="apple-mobile-web-app-capable" content="yes")
+    meta(name="apple-mobile-web-app-status-bar-style" content="black-translucent")
+
+    title memostant
+    link(rel="shortcut icon", href="/images/runstant.png")
+
+    script(src="https://code.jquery.com/jquery-2.1.4.min.js")
+    script(src="https://code.jquery.com/ui/1.11.3/jquery-ui.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js")
+    script(src="https://cdn.jsdelivr.net/jquery.color-animation/1/mainfile")
+
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/riot/2.2.3/riot+compiler.js')
+
+    script(src="https://cdn.rawgit.com/phi-jp/high/0.0.3/high.js")
+  body
+    block content

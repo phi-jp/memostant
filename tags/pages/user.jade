@@ -9,6 +9,7 @@ user
         span.title {title}
         p {content}
           span by {_creator.name}
+        span {parent.created(this)} / {parent.updated(this)}
         button(onclick='{destroy}') destroy
         button(onclick='{edit}') edit
 
@@ -18,7 +19,7 @@ user
       // ノートを取得
       api.notes.index()
         .done(function(res) {
-          self.notes = res.notes;
+          self.notes = res.notes.reverse();
           self.update();
         });
     };
@@ -49,6 +50,15 @@ user
         .done(function() {
           self.fetch();
         });
+    };
+
+    this.created = function(item) {
+      var date = new Date(item.created);
+      return [date.getHours(), date.getMinutes()].join(':');
+    };
+    this.updated = function(item) {
+      var date = new Date(item.updated);
+      return [date.getHours(), date.getMinutes()].join(':');
     };
 
 

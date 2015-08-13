@@ -10,7 +10,6 @@ app
     if (hash && hash.id_token) {
       localStorage.setItem('id_token', hash.id_token);
       location.hash = '';
-      location.reload();
     }
 
     this.on('mount', function() {

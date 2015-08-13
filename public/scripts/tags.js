@@ -7,7 +7,6 @@ riot.tag('app', '<header></header> <content></content>', function(opts) {
     if (hash && hash.id_token) {
       localStorage.setItem('id_token', hash.id_token);
       location.hash = '';
-      location.reload();
     }
     
     this.on('mount', function() {
@@ -54,22 +53,6 @@ riot.tag('app', '<header></header> <content></content>', function(opts) {
     
       var hash = location.hash.replace('#', '');
       riot.route(hash || 'home');
-    });
-  
-});
-
-riot.tag('header', '<nav> <div class="nav-wrapper"> <div class="brand-logo"><a href="">Memostant</a></div> <ul if="{!isLogin}" class="right"> <li><a href="#login" onclick="{login}">Login</a></li> <li><a href="#signup">Signup</a></li> </ul> <ul if="{isLogin}" class="right"> <li><a href="#user/{global.me.name}">{global.me.name}</a></li> <li><a href="" onclick="{logout}">Logout</a></li> </ul> </div> </nav> <style scoped="scoped"> :scope { display: block } nav { padding: 0px 20px; } </style>', function(opts) {
-    this.login = function() {
-      lock.show({ authParams: { scope: 'openid' } });
-    };
-
-    this.logout = function() {
-      localStorage.removeItem('id_token');
-    };
-    
-    this.on('update', function() {
-      var id_token = localStorage.getItem('id_token');
-      this.isLogin = !!id_token;
     });
   
 });
@@ -193,5 +176,21 @@ riot.tag('user', '<div class="container"> <h2>user</h2> <button onclick="{create
       var date = new Date(item.updated);
       return [date.getHours(), date.getMinutes()].join(':');
     };
+  
+});
+
+riot.tag('header', '<nav> <div class="nav-wrapper"> <div class="brand-logo"><a href="">Memostant</a></div> <ul if="{!isLogin}" class="right"> <li><a href="#login" onclick="{login}">Login</a></li> <li><a href="#signup">Signup</a></li> </ul> <ul if="{isLogin}" class="right"> <li><a href="#user/{global.me.name}">{global.me.name}</a></li> <li><a href="" onclick="{logout}">Logout</a></li> </ul> </div> </nav> <style scoped="scoped"> :scope { display: block } nav { padding: 0px 20px; } </style>', function(opts) {
+    this.login = function() {
+      lock.show({ authParams: { scope: 'openid' } });
+    };
+
+    this.logout = function() {
+      localStorage.removeItem('id_token');
+    };
+    
+    this.on('update', function() {
+      var id_token = localStorage.getItem('id_token');
+      this.isLogin = !!id_token;
+    });
   
 });

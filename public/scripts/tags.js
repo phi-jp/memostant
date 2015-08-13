@@ -52,6 +52,22 @@ riot.tag('app', '<header></header> <content></content>', function(opts) {
   
 });
 
+riot.tag('header', '<nav> <div class="nav-wrapper"> <div class="brand-logo"><a href="">Memostant</a></div> <ul if="{!isLogin}" class="right"> <li><a href="#login" onclick="{login}">Login</a></li> <li><a href="#signup">Signup</a></li> </ul> <ul if="{isLogin}" class="right"> <li><a href="#user/{global.me.name}">{global.me.name}</a></li> <li><a href="" onclick="{logout}">Logout</a></li> </ul> </div> </nav> <style scoped="scoped"> :scope { display: block } nav { padding: 0px 20px; } </style>', function(opts) {
+    this.login = function() {
+      lock.show({ authParams: { scope: 'openid' } });
+    };
+
+    this.logout = function() {
+      localStorage.removeItem('id_token');
+    };
+    
+    this.on('update', function() {
+      var id_token = localStorage.getItem('id_token');
+      this.isLogin = !!id_token;
+    });
+  
+});
+
 riot.tag('home', '<h2>home</h2> <ul> <li each="{notes}"><b>{title}</b> <span>{content}</span> <span>by {_creator.name}</span></li> </ul>', function(opts) {
     var self = this;
     this.fetch = function() {
@@ -96,7 +112,7 @@ riot.tag('note', '<h2>user</h2> <form name="mainForm" onsubmit="{submit}"> <inpu
   
 });
 
-riot.tag('user', '<h2>user</h2> <ul class="collection"> <li each="{notes}" onclick="{edit}" class="collection-item"><span class="title">{title}</span> <p>{content}<span>by {_creator.name}</span></p> </li> </ul>', function(opts) {
+riot.tag('user', '<div class="container"> <h2>user</h2> <button onclick="{create}">create</button> <ul class="collection"> <li each="{notes}" class="collection-item"><span class="title">{title}</span> <p>{content}<span>by {_creator.name}</span></p> <button onclick="{destroy}">destroy</button> <button onclick="{edit}">edit</button> </li> </ul> </div>', function(opts) {
     var self = this;
     this.fetch = function() {
 
@@ -108,6 +124,17 @@ riot.tag('user', '<h2>user</h2> <ul class="collection"> <li each="{notes}" oncli
     };
     this.fetch();
     
+    this.create = function() {
+      var data = {
+        title: 'untitled',
+        content: 'ここにテキスト書いてってねー♪',
+      }; 
+      api.notes.create(data)
+        .done(function() {
+          self.fetch();
+        });
+    };
+    
     this.edit = function(e) {
       var item = e.item;
       if (item._creator._id === global.me._id) {
@@ -115,21 +142,13 @@ riot.tag('user', '<h2>user</h2> <ul class="collection"> <li each="{notes}" oncli
         riot.route(path);
       }
     };
-  
-});
-
-riot.tag('header', '<nav> <div class="nav-wrapper"> <div class="brand-logo"><a href="">Memostant</a></div> <ul if="{!isLogin}" class="right"> <li><a href="#login" onclick="{login}">Login</a></li> <li><a href="#signup">Signup</a></li> </ul> <ul if="{isLogin}" class="right"> <li><a href="#user/{global.me.name}">{global.me.name}</a></li> <li><a href="" onclick="{logout}">Logout</a></li> </ul> </div> </nav> <style scoped="scoped"> :scope { display: block } nav { padding: 0px 20px; } </style>', function(opts) {
-    this.login = function() {
-      lock.show({ authParams: { scope: 'openid' } });
-    };
-
-    this.logout = function() {
-      localStorage.removeItem('id_token');
-    };
     
-    this.on('update', function() {
-      var id_token = localStorage.getItem('id_token');
-      this.isLogin = !!id_token;
-    });
+    this.destroy = function(e) {
+      var item = e.item;
+      api.notes.destroy(item._id)
+        .done(function() {
+          self.fetch();
+        });
+    };
   
 });

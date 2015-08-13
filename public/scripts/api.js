@@ -54,8 +54,11 @@
           data: data,
         });
       },
-      destroy: function() {
-
+      destroy: function(id) {
+        return api.ajax({
+          url: 'notes/' + id,
+          method: 'DELETE',
+        });
       },
     }
   };

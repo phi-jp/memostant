@@ -1,11 +1,16 @@
 user
-  h2 user
+  div.container
+    h2 user
 
-  ul.collection
-    li.collection-item(each='{notes}', onclick='{edit}')
-      span.title {title}
-      p {content}
-        span by {_creator.name}
+    button(onclick='{create}') create
+
+    ul.collection
+      li.collection-item(each='{notes}')
+        span.title {title}
+        p {content}
+          span by {_creator.name}
+        button(onclick='{destroy}') destroy
+        button(onclick='{edit}') edit
 
   script.
     var self = this;
@@ -19,6 +24,17 @@ user
     };
     this.fetch();
 
+    this.create = function() {
+      var data = {
+        title: 'untitled',
+        content: 'ここにテキスト書いてってねー♪',
+      }; 
+      api.notes.create(data)
+        .done(function() {
+          self.fetch();
+        });
+    };
+
     this.edit = function(e) {
       var item = e.item;
       if (item._creator._id === global.me._id) {
@@ -26,3 +42,18 @@ user
         riot.route(path);
       }
     };
+
+    this.destroy = function(e) {
+      var item = e.item;
+      api.notes.destroy(item._id)
+        .done(function() {
+          self.fetch();
+        });
+    };
+
+
+
+
+
+
+

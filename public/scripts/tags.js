@@ -101,14 +101,19 @@ riot.tag('note', '<h2>user</h2> <form name="mainForm" onsubmit="{submit}"> <inpu
   
 });
 
-riot.tag('setting', '<div class="container"> <h2>setting</h2> <form name="mainForm" onsubmit="{submit}"> <input name="name" type="text" placeHolder="name"> <button>submit</button> </form> </div>', function(opts) {
+riot.tag('setting', '<div class="container"> <h2>setting</h2> <form name="mainForm" onsubmit="{submit}"> <input name="name" type="text" placeHolder="name"> <textarea name="description" placeHolder="description"></textarea> <button>submit</button> </form> </div>', function(opts) {
+    this.mainForm.name.value = global.me.name;
+    this.mainForm.description.value = global.me.description;
+    
     this.submit = function() {
-      var elements = this.mainForm.elements;
+      var form = this.mainForm;
       var data = {
-        name: elements.name.value,
+        name: form.name.value,
+        description: form.description.value,
       };
+    
       if (global.me) {
-        api.users.update(data);
+        api.users.update(global.me._id, data);
       }
       else {
         api.users.create(data);
@@ -117,7 +122,7 @@ riot.tag('setting', '<div class="container"> <h2>setting</h2> <form name="mainFo
   
 });
 
-riot.tag('user', '<div class="container"> <h2>user</h2> <button onclick="{create}">create</button> <ul class="collection"> <li each="{notes}" class="collection-item"><span class="title">{title}</span> <p>{content}<span>by {_creator.name}</span></p><span>{parent.created(this)} / {parent.updated(this)}</span> <button onclick="{destroy}">destroy</button> <button onclick="{edit}">edit</button> </li> </ul> </div>', function(opts) {
+riot.tag('user', '<div class="container"> <h2>{user.name} のページ</h2> <p>{user.description}</p><a href="#setting" class="btn">setting</a> <button onclick="{create}" class="btn">create</button> <ul class="collection"> <li each="{notes}" class="collection-item"><span class="title">{title}</span> <p>{content}<span>by {_creator.name}</span></p><span>{parent.created(this)} / {parent.updated(this)}</span> <button onclick="{destroy}">destroy</button> <button onclick="{edit}">edit</button> </li> </ul> </div>', function(opts) {
     var self = this;
     
     this.on('mount', function() {

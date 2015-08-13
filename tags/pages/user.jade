@@ -1,8 +1,10 @@
 user
   div.container
-    h2 user
-
-    button(onclick='{create}') create
+    h2
+      | {user.name} のページ
+    p {user.description}
+    a.btn(href='#setting') setting
+    button.btn(onclick='{create}') create
 
     ul.collection
       li.collection-item(each='{notes}')

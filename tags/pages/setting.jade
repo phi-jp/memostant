@@ -3,16 +3,22 @@ setting
     h2 setting
     form(name='mainForm', onsubmit='{submit}')
       input(name='name', type='text', placeHolder='name')
+      textarea(name='description', placeHolder='description')
       button submit
 
   script.
+    this.mainForm.name.value = global.me.name;
+    this.mainForm.description.value = global.me.description;
+
     this.submit = function() {
-      var elements = this.mainForm.elements;
+      var form = this.mainForm;
       var data = {
-        name: elements.name.value,
+        name: form.name.value,
+        description: form.description.value,
       };
+
       if (global.me) {
-        api.users.update(data);
+        api.users.update(global.me._id, data);
       }
       else {
         api.users.create(data);

@@ -15,15 +15,27 @@ user
 
   script.
     var self = this;
+
+    this.on('mount', function() {
+      var name = '';
+      riot.route.exec(function(path) {
+        name = path[1];
+      });
+      api.users.show(name)
+        .done(function(data) {
+          self.user = data.user;
+          self.fetch();
+        });
+    });
+
     this.fetch = function() {
       // ノートを取得
-      api.notes.index()
+      api.notes.index({userId:self.user._id})
         .done(function(res) {
           self.notes = res.notes.reverse();
           self.update();
         });
     };
-    this.fetch();
 
     this.create = function() {
       var data = {

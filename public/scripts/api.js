@@ -28,6 +28,12 @@
     },
 
     users: {
+      show: function(name) {
+        return api.ajax({
+          url: 'users/' + name,
+          method: 'GET',
+        });
+      },
       create: function(data) {
         return api.ajax({
           url: 'users',
@@ -45,10 +51,11 @@
     },
 
     notes: {
-      index: function() {
+      index: function(data) {
         return api.ajax({
           url: 'notes',
           method: 'GET',
+          data: data,
         });
       },
       show: function(id) {

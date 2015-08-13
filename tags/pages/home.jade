@@ -1,12 +1,14 @@
 home
-  h2 home
-  ul
-    li(each='{notes}')
-      b {title}
-      | 
-      span {content}
-      | 
-      span by {_creator.name}
+  div.container
+    h2 home
+    ul.collection
+      li.collection-item(each='{notes}')
+        span.title {title}
+        p {content}
+          span by {_creator.name}
+        span {parent.created(this)} / {parent.updated(this)}
+        button(onclick='{destroy}') destroy
+        button(onclick='{edit}') edit
 
   script.
     var self = this;
